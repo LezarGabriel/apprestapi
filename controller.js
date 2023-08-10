@@ -3,32 +3,68 @@
 var response = require('./res');
 var connection = require('./koneksi');
 
-exports.index = function(req,res){
-    response.ok("applikasi REST API ku berjalan!",res)
+exports.index = function (req, res) {
+    response.ok("applikasi REST API ku berjalan!", res)
 };
 
 //menampilkan semua data mahasiswa
-exports.tampilsemuamahasiswa = function(req,res){
-    connection.query('SELECT * FROM mahasiswa', function(error, rows, fields){
-        if(error){
+exports.tampilsemuamahasiswa = function (req, res) {
+    connection.query('SELECT * FROM mahasiswa', function (error, rows, fields) {
+        if (error) {
             console.log(error);
-        }else {
+        } else {
             response.ok(rows, res)
         }
     });
 };
 
 //menampilkan semua data mahasiswa berdasarkan id
-exports.tampilberdasarkanid = function(req,res){
+exports.tampilberdasarkanid = function (req, res) {
     let id = req.params.id;
     connection.query('SELECT * FROM mahasiswa WHERE id_mahasiswa = ?', [id],
-        function(error, rows, fields){
-            if(error){
+        function (error, rows, fields) {
+            if (error) {
                 console.log(error);
-        }else {
-            response.ok(rows, res);
+            } else {
+                response.ok(rows, res);
             }
-                
+
         });
-        
+
+};
+
+//menambahkan data mahasiswa
+exports.tambahMahasiswa = function (req, res) {
+    var npm = req.body.npm;
+    var nama = req.body.nama;
+    var jurusan = req.body.jurusan;
+
+    connection.query('INSERT INTO mahasiswa (npm,nama,jurusan) VALUES(?,?,?)',
+        [npm, nama, jurusan],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok("Berhasil Menambahkan Data!", res)
+            }
+        });
+};
+
+// mengubah data berdasarkan id
+exports.ubahMahasiswa = function (req, res) {
+    var id = req.body.id_mahasiswa;
+    var npm = req.body.npm;
+    var nama = req.body.nama;
+    var jurusan = req.body.jurusan;
+
+    connection.query('UPDATE mahasiswa SET npm=?, nama=?,jurusan=? WHERE id_mahasiswa=?'[npm, nama, jurusan],
+        function (error, rows, fields) {
+            if (error) {
+                console.log(error);
+            } else {
+                response.ok("Berhasil Ubah Data!", res)
+            }
+
+        });
+
 };
