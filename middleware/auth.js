@@ -54,6 +54,7 @@ exports.login = function (req, res) {
     var table = ["user", "password", md5(post.password), "email", post.email];
 
     query = mysql.format(query.table);
+
     connection.query(query, function(error, rows){
         if(error){
             console.log(error);
@@ -70,7 +71,7 @@ exports.login = function (req, res) {
                     ip_address: ip.address()
                 }
 
-                var query = "INSER INTO ?? SET ?";
+                var query = "INSERT INTO ?? SET ?";
                 var table = ["akses_token"];
 
                 query = mysql.format(query, table);
@@ -91,4 +92,8 @@ exports.login = function (req, res) {
             }
         }
     });
+}
+
+exports.halamanrahasia = function(req, res){
+    response.ok("Halaman ini hanya untuk user dengan role = 2!", res);
 }
